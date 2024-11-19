@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Item Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        .item-list {
+            margin-bottom: 20px;
+        }
+        .item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        button, a {
+            margin-right: 10px;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover, a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Item Data</h2>
+    <a href="{{ url_for('add_item') }}" style="background-color: #28a745;">Add New Item</a>
+    
+    <div class="item-list">
+        {% for item in items %}
+            <div class="item">
+                <strong>ID:</strong> {{ item.id }}<br>
+                <strong>Image:</strong> <img src="{{ item.image }}" alt="{{ item.name }}" style="width: 100px;"><br>
+                <strong>Name:</strong> {{ item.name }}<br>
+                <strong>Description:</strong> {{ item.description }}<br>
+                <strong>Price:</strong> ${{ item.price }}<br>
+                <strong>Showing:</strong><input type="checkbox" disabled {% if item.show %}checked{% endif %} /><br><br> <!-- two br for better showing-->
+                <a href="{{ url_for('edit_item', item_id=item.id) }}">Edit</a>
+                <form action="{{ url_for('delete_item', item_id=item.id) }}" method="POST" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+    <p><a href="{{ url_for('admin') }}">Back To Main Menu</a></p>
+</body>
+</html>

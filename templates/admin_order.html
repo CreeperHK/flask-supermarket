@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .quantity {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .quantity button {
+            width: 30px;
+            height: 30px;
+        }
+        .quantity input {
+            width: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Show Orders</h1>
+    <form action="{{ url_for('filter_orders') }}" method="GET">
+        <label for="state">Filter by State:</label>
+        <select name="state" id="state" onchange="this.form.submit()">
+            <option value="" disabled selected>Select State</option>
+            <option value="All">Show All</option>
+            <option value="Processing">Processing</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Shipping">Shipping</option>
+            <option value="Completed">Completed</option>
+        </select>
+    </form>
+    
+    <table>
+        <tr>
+            <th width: 10%>Order ID</th>
+            <th width: 10%>Username</th>
+            <th width: 20%>Items</th>
+            <th width: 5%>Total Price</th>
+            <th width: 10%>Time</th>
+            <th width: 10%>State</th>
+            <th width: 10%>Action</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order['_id'] }}</td>
+            <td>{{ order['username'] }}</td>
+            <td>
+                {% for item in order['items'] %}
+                    <li>{{ item['name'] }} - Quantity: {{ item['quantity'] }}</li>
+                        <br>
+                {% endfor %}
+            </td>
+            <td>${{ order['total_price'] }}</td>
+            <td>{{ order['time'] }}</td>
+            <td>{{ order['state'] }}</td>
+            <td>
+                <form action="{{ url_for('update_order_state', order_id=order['_id']) }}" method="POST" style="display:inline;">
+                    <select name="new_state" required>
+                        <option value="" disabled>Select State</option>
+                        <option value="Processing" {% if order['state'] == 'Processing' %}selected{% endif %}>Processing</option>
+                        <option value="Confirmed" {% if order['state'] == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                        <option value="Shipping" {% if order['state'] == 'Shipping' %}selected{% endif %}>Shipping</option>
+                        <option value="Completed" {% if order['state'] == 'Completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+                <form action="{{ url_for('delete_order', order_id=order['_id']) }}" method="POST" style="display:inline;">
+                    <button type="submit">Delete</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('admin') }}">To Admin Menu</a>
+</body>
+</html>

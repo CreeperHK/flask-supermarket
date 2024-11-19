@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .quantity {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .quantity button {
+            width: 30px;
+            height: 30px;
+        }
+        .quantity input {
+            width: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Products in Our Shop</h1>
+    <form action="{{ url_for('submit_order') }}" method="POST">
+        {% for item in items %}
+            <div>
+                <strong>Image:</strong> <img src="{{ item.image }}" alt="{{ item.name }}" width="100"><br>
+                <strong>Name:</strong> {{ item.name }}<br>
+                <strong>Description:</strong> {{ item.description }}<br>
+                <strong>Price:</strong> ${{ item.price }}<br>
+                <div class="quantity">
+                    <button type="button" onclick="decrement('{{ item.id }}')">-</button>
+                    <input type="number" id="qty-{{ item.id }}" name="quantity[{{ item.id }}]" value="0" min="0" readonly>
+                    <button type="button" onclick="increment('{{ item.id }}')">+</button>
+                </div>
+                <hr>
+            </div>
+        {% endfor %}
+        <button type="submit">Submit Order</button>
+        <button type="button" onclick="resetQuantities()">Reset</button>
+    </form>
+
+    <script>
+        function increment(id) {
+            const qtyInput = document.getElementById('qty-' + id);
+            qtyInput.value = parseInt(qtyInput.value) + 1;
+        }
+
+        function decrement(id) {
+            const qtyInput = document.getElementById('qty-' + id);
+            if (qtyInput.value > 0) {
+                qtyInput.value = parseInt(qtyInput.value) - 1;
+            }
+        }
+
+        function resetQuantities() {
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.value = 0;
+            });
+        }
+    </script>
+    <br>
+    <button type="button" onclick="window.location.href='welcome'">Return to home page</button>
+</body>
+</html> 

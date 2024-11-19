@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Item</title>
+</head>
+<body>
+    <h1>Edit Item</h1>
+    <form method="POST">
+        <label for="id">Product ID:</label>
+        <input type="text" name="id" value="{{ item.id }}" required><br>
+        <label for="image">Image URL:</label>
+        <input type="text" name="image" value="{{ item.image }}" required><br>
+        <label for="name">Product Name:</label>
+        <input type="text" name="name" value="{{ item.name }}" required><br>
+        <label for="description">Description:</label>
+        <textarea name="description" required>{{ item.description }}</textarea><br>
+        <label for="price">Price:</label>
+        <input type="number" name="price" value="{{ item.price }}" step="0.1" required><br>
+        <label for="show">Showing:</label>
+        <input type="checkbox" name="show" {% if item.show %}checked{% endif %}><br>
+        <button type="submit">Update Item</button>
+    </form>
+    <a href="{{ url_for('admin_item') }}">Cancel</a>
+</body>
+</html>

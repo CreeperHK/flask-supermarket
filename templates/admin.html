@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admib</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>This is Admin dashboard</h2>
+    <p>Hello, {{ username }} (admin)</p>
+    <p><a href="{{ url_for('admin_item') }}">To Admin Product Menu</a></p>
+    <p><a href="{{ url_for('admin_order') }}">Show All Orders</a></p>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+</body>
+</html>

@@ -74,3 +74,7 @@ This is a Flask-based web application for managing a supermarket system. The app
 ## Contributing
 
 Feel free to fork the repository and submit pull requests. Contributions are welcome!
+
+## Reminder
+
+after you collect the full dictionary, please go to app.py to edit with the connection method and the connection URL

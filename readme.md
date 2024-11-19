@@ -1,5 +1,5 @@
 # Disclaimer: 
-This program is not for commercial use. Please be responsible for any legal issues during use. In addition, some of the pictures in the program come from the Internet. If there are any copyright issues, please contact me immediately from the copyright owner. I will remove the relevant content immediately after receiving the message.
+This program is not for commercial use. Please be responsible for any legal issues during use. In addition, some of the pictures in the program come from the Internet. If there are any copyright issues, please contact me immediately. I will remove the relevant content immediately after receiving the message.
 
 # Flask Supermarket Application
 

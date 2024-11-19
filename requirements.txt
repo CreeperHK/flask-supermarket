@@ -1,0 +1,5 @@
+Flask==2.2.2
+Flask-PyMongo==2.3.0
+pymongo==4.1.1
+Werkzeug==2.2.2
+pytz==2023.3

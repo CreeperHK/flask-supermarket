@@ -60,7 +60,7 @@ def login():
         elif user and check_hash(user['password'], password):
             session['username'] = username  # Save username to session
             return redirect(url_for('welcome'))
-        else:
+        else:   
             flash('Invalid username or password')
 
     return render_template('login.html')
@@ -291,7 +291,6 @@ def filter_orders():
 def delete_order(order_id):
     if 'username' in session and 'admin' in session:
         mongo.order.delete_one({'_id': ObjectId(order_id)})
-        flash('Order deleted successfully!')
         return redirect(url_for('admin_order'))  # Redirect to the order list page
     return redirect(url_for('login'))
 

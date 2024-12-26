@@ -1,5 +1,6 @@
 # Disclaimer: 
-This program is not for commercial use. Please be responsible for any legal issues during use. In addition, some of the pictures in the program come from the Internet. If there are any copyright issues, please contact me immediately. I will remove the relevant content immediately after receiving the message.
+This program is for academic use only. Please be responsible for any legal issues during use. In addition, some of the pictures in this program come from the Internet. 
+This program is using Azure, AWS or Google Cloud may not suitable for this program.
 
 # Flask Supermarket Application
 
@@ -59,8 +60,15 @@ This is a Flask-based web application for managing a supermarket system. The app
    ```bash
    python app.py
    ```
+   OR
+   ```bash
+   flask run --host=127.0.0.1 --port=8000
+   ```
 
-6. Open your web browser and navigate to `http://127.0.0.1:5000`.
+6. Open your web browser and navigate to `http://127.0.0.1:5000`, test with the local deploy in localhost
+
+7. (optional)
+   Follow steps 1-6 above to re-execute it in the VM, Configure with Nginx and Gunicorn yourself to run this program in the VM.
 
 ## Usage
 
@@ -71,10 +79,13 @@ This is a Flask-based web application for managing a supermarket system. The app
 - **Place Orders**: Users can browse items and place orders.
 - **View Orders**: Users can view their orders, and admins can view all orders.
 
+## Need to know while testing
+- Please make a Admin user account in MongoDB before do the testing.
+- The admin page and normal user login page is the same.
+- Login with the '<username>-a', the python will run on admin login. If the user does not in the admin database, the login will fail.
+- Please make sure all module has been install properly, if the module missing, it may not showing error until you run on those part.
+- Please run the whole program locally before putting it into Cloud platform.
+
 ## Contributing
 
 Feel free to fork the repository and submit pull requests. Contributions are welcome!
-
-## Reminder
-
-after you collect the full dictionary, please go to app.py to edit with the connection method and the connection URL

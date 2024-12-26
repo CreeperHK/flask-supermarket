@@ -1,6 +1,9 @@
+from http.client import HTTPException
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from azure.storage.blob import BlobServiceClient
+import os
 import pymongo
 from werkzeug.security import generate_password_hash as hash, check_password_hash as check_hash
 import datetime
@@ -8,24 +11,47 @@ import pytz
 import random
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from azure.identity import DefaultAzureCredential
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+import sys
 
 app = Flask(__name__)
-app.secret_key = 'chu'
+app.secret_key = ''
+
+AZURE_CONNECTION_STRING = ''
+BLOB_CONTAINER_NAME = ''
+blob_service_client = BlobServiceClient.from_connection_string(AZURE_CONNECTION_STRING)
 
 # MongoDB Connection
-connectType = 'azure'
+connectType = 'localhost'
 
 if connectType == 'Atlas':
     myclient = pymongo.MongoClient("")
-    mongo = myclient["db"]
+    mongo = myclient["supermarket"]
 
-if connectType == 'azure':
+elif connectType == 'azure':
     myclient = pymongo.MongoClient("")
     mongo = myclient["supermarket"]
 
-if connectType == 'localhost':
-    myclient = pymongo.MongoClient("")
-    mongo = myclient["flask_test"]
+elif connectType == 'localhost':
+    myclient = pymongo.MongoClient("mongodb://localhost:27017")
+    mongo = myclient["supermarket"]
+
+else:
+    print("Connect type haven't been set, Program end.")
+    sys.exit()
+
+@app.errorhandler(Exception)
+def handle_error(error):
+    if isinstance(error, HTTPException):
+        error_code = error.code
+    else:
+        error_code = 404
+
+    if error_code == 302:
+        return None
+    
+    return render_template('error.html', error_code=error_code), error_code
 
 @app.route('/')
 def index():
@@ -122,16 +148,34 @@ def admin_item():
 def add_item():
     if request.method == 'POST':
         if 'username' in session and 'admin' in session:
+            if 'image' not in request.files:
+                return redirect(request.url)
+
+            file = request.files['image']
+            if file.filename == '':
+                return redirect(request.url)
+
             new_item = {
                 'show': request.form.get('show', False) == 'on',
                 'id': request.form['id'],
-                'image': request.form['image'],
                 'name': request.form['name'],
                 'description': request.form['description'],
                 'price': float(request.form['price'])
             }
-            mongo.item.insert_one(new_item)
+            try:
+                blob_client = blob_service_client.get_blob_client(container=BLOB_CONTAINER_NAME, blob=file.filename)
+                blob_client.upload_blob(file, overwrite=True)  # Overwrite if exists
+
+                new_item['image'] = f"https://imageforwork.blob.core.windows.net/{BLOB_CONTAINER_NAME}/{file.filename}"
+
+                # Insert [item]
+                mongo.item.insert_one(new_item)
+
+            except Exception as e:
+                return redirect(request.url)
+
             return redirect(url_for('admin_item'))
+
     return render_template('add_item.html')
 
 @app.route('/edit_item/<item_id>', methods=['GET', 'POST'])

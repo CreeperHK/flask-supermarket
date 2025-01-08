@@ -65,7 +65,7 @@ This is a Flask-based web application for managing a supermarket system. The app
    flask run --host=127.0.0.1 --port=8000
    ```
 
-6. Open your web browser and navigate to `http://127.0.0.1:5000`, test with the local deploy in localhost
+6. Open your web browser and navigate to `http://127.0.0.1:8000`, test with the local deploy in localhost
 
 7. (optional)
    Follow steps 1-6 above to re-execute it in the VM, Configure with Nginx and Gunicorn yourself to run this program in the VM.
